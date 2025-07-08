@@ -11,6 +11,7 @@ This is a web-based application developed using **Spring Boot**, **Thymeleaf**, 
 - 🖼️ Dynamic Frontend with Thymeleaf Templates
 - 📊 Admin Dashboard
 - 🎨 Responsive UI using HTML, CSS, and JS
+- Payment Gateway
 
 ---
 
@@ -20,9 +21,10 @@ This is a web-based application developed using **Spring Boot**, **Thymeleaf**, 
 |---------------|------------------------|
 | Backend       | Spring Boot (Java)     |
 | Frontend      | Thymeleaf, HTML, JS    |
-| Database      | MySQL  |
-| Recommendation|  Python/FlaskAPI |
-| Build Tool    | Maven        |
+| Database      | MySQL                  |
+| Recommendation|  Python/FlaskAPI       |
+| Build Tool    | Maven                  |
+|Payment Gateway| E-sewa                 |
 
 ---
 
