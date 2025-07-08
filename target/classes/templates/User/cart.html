@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Insert title here</title>
+</head>
+<body>
+<section>
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+
+        <div class="card card-sh">
+            <div class="card-header text-center">
+                <p class="fs-4">Cart Details</p>
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+            </div>
+            <div class="card-body" th:if="${carts != null and !carts.isEmpty()}">
+                <table class="table table-bordered align-middle text-center shadow-sm rounded">
+                    <thead class="table-green">
+                    <tr>
+                        <th>S.N</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Unit Price</th>
+                        <th>Quantity[Kg]</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cartitem, c : ${carts}">
+                        <td>[[${c.count}]]</td>
+                        <td>
+                            <img th:src="@{'/img/product/' + ${cartitem.product.image}}" class="img-thumbnail" style="width: 70px; height: 70px;">
+                        </td>
+                        <td class="fw-semibold">[[${cartitem.product.name}]]</td>
+                        <td>Rs. [[${cartitem.product.discountPrice}]]</td>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                <a th:href="@{'/user/cartQuantityUpdate?update=sub&cid=' + ${cartitem.id}}" class="btn btn-sm btn-outline-secondary rounded-circle">
+                                    <i class="fa fa-minus"></i>
+                                </a>
+                                <span class="fw-bold">[[${cartitem.quantity}]]</span>
+                                <a th:href="@{'/user/cartQuantityUpdate?update=add&cid=' + ${cartitem.id}}" class="btn btn-sm btn-outline-secondary rounded-circle">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td>Rs. [[${cartitem.totalUnitPrice}]]</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr class="table-light fw-bold">
+                        <td colspan="5" class="text-end">Total Amount</td>
+                        <td>Rs. [[${totalOrderPrice}]]</td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <div class="text-center mt-3">
+                    <a href="/user/orders" class="btn btn-warning btn-lg rounded-pill px-4 shadow">
+                        <i class="fa fa-credit-card"></i> Proceed Payment
+                    </a>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(carts)}" class="text-center mt-5">
+                <img src="/img/emptycart.png" alt="No results found" style="max-width: 780px;">
+                <p class="fs-4 mt-3">Your cart is empty.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

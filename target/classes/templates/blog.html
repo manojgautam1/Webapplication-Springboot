@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VFES | BLOG</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/flexslider.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="https://kit.fontawesome.com/b1f66e5e81.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar  navbar-expand-lg fixed-top" style="background-color: #bcd5bc; color: white;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img src="/img/VFES_HOME.png" alt="Logo" width="120" height="50" class="d-inline-block align-text-top rounded"></a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!--        Nav links-->
+        <div class="collapse navbar-collapse position-relative" id="navbarNav">
+            <!-- Centered main nav -->
+            <ul class="navbar-nav navbar-nav-center">
+                <th:block th:if="${user == null}">
+                    <li class="nav-item"><a class="nav-link active" href="/home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog">About us</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/products">Products</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/sellproduce">Sell Your Produce</a></li>
+                </th:block>
+
+                <th:block th:if="${user != null}">
+                    <li class="nav-item" th:if="${user.role == 'ROLE_USER'}">
+                        <a class="nav-link active" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item" th:if="${user.role == 'ROLE_USER'}">
+                        <a class="nav-link active" href="/products">Products</a>
+                    </li>
+                    <li class="nav-item" th:if="${user.role == 'ROLE_USER'}">
+                        <a class="nav-link active" href="/blog">About us</a>
+                    </li>
+                    <li class="nav-item" th:if="${user.role == 'ROLE_USER'}">
+                        <a class="nav-link active" href="/sellproduce">Sell Your Produce</a>
+                    </li>
+
+                </th:block>
+            </ul>
+
+            <!-- Right-aligned links -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <th:block th:if="${user == null}">
+                    <li class="nav-item me-2">
+                        <a class=" nav-btn custom-btn" href="/signin"><i class="fa-solid fa-right-to-bracket me-1"></i>LOGIN</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-btn custom-btn" href="/register"><i class="fa-solid fa-user-plus me-1"></i>REGISTER</a>
+                    </li>
+                </th:block>
+
+                <th:block th:if="${user != null}">
+                    <li class="nav-item" th:if="${user.role == 'ROLE_USER'}">
+                        <a class="nav-link active position-relative me-2" href="/user/cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" th:if="${countCart > 0}">
+                                [[${countCart}]]
+                                <span class="visually-hidden">items in cart</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i> [[${user.name}]]
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li th:if="${user.role == 'ROLE_USER'}"><a class="dropdown-item" href="/user/profile">Profile</a></li>
+<!--                            <li th:if="${user.role == 'ROLE_ADMIN'}"><a class="dropdown-item" href="/admin/profile">Profile</a></li>-->
+                            <li th:if="${user.role == 'ROLE_USER'}"><a class="dropdown-item" href="/user/user-order">My Orders</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        </ul>
+                    </li>
+
+                </th:block>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="blog-content">
+    <header class="blog-hero">
+        <div class="blog-hero-content">
+            <h1 class="custom-black">Latest On VFES and Organic Farming Updates</h1>
+            <p>
+                Stay informed about latest organic methods and seasoned production with information of organic farming and agricultural tips.
+            </p>
+            <div class="hero-buttons">
+                <th:block th:if="${user==null}">
+                    <a href="/signin" class="btn btn-primary">Sign In</a>
+                    <a href="/products" class="btn btn-secondary">Products</a>
+                </th:block>
+                <th:block th:if="${user!=null}">
+                    <a href="/products" class="btn btn-primary">View Products</a>
+                    <a href="/sellproduce" class="btn btn-secondary">Contribute</a>
+                </th:block>
+            </div>
+        </div>
+        <img
+                src="/img/img.png"
+                alt="Blog hero-section"
+                class="max-w-[600px] h-auto object-fit overflow-hidden"
+        />
+    </header>
+    <br>
+    <!-- Commitment Div -->
+    <div class="commitment-section-blog p-10">
+        <div class="container">
+            <h2>Our Commitment to Organic Living</h2>
+            <p>At FreshFields, we believe in providing the freshest, most sustainable organic produce straight from our farms to your table. Our commitment is to nurture the earth, support local farmers, and deliver quality you can taste in every bite.</p>
+        </div>
+    </div>
+
+    <!-- Reviews Div -->
+    <div class="reviews-section-blog">
+        <div class="container">
+            <h1>What Our Customers Say</h1>
+            <div class="reviews-container">
+                <div class="reviews-section-blog-card">
+                    <p>"The organic vegetables from FreshFields are the best I've ever tasted! Fresh, flavorful, and delivered right to my door."</p>
+                    <p class="author">- Sarah M.</p>
+                </div>
+                <div class="reviews-section-blog-card">
+                    <p>"I love knowing that my food is grown without chemicals. FreshFields makes eating healthy so easy."</p>
+                    <p class="author">- John D.</p>
+                </div>
+                <div class="reviews-section-blog-card">
+                    <p>"The quality is unmatched, and the customer service is fantastic. I’m a loyal customer for life!"</p>
+                    <p class="author">- Emily R.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="blog-section">
+        <h2>Latest from Our Blog</h2>
+        <div class="blog-grid">
+            <article class="blog-card">
+                <img src="/img/img.png" alt="Blog post" />
+                <div class="blog-content">
+                    <h3>The Future of Innovation in organic farm</h3>
+                    <p>
+                        Discover how the organic food industry is experiencing a transformative shift,
+                        and e-commerce platforms are leading the charge in making organic produce more accessible to consumers worldwide.
+                    </p>
+                    <a onclick="openModal('future-eshop')" class="read-more"
+                    >Read More →</a
+                    >
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <img src="/img/img.png" alt="Blog post" />
+                <div class="blog-content">
+                    <h3>Tips for Organic Farming</h3>
+                    <p>
+                        Learn the best practices for maintaining your soil and personal health
+                        by organic production with our expert tips. Also, it helps to build the relationship between you and your produces.
+                    </p>
+                    <a onclick="openModal('organic-tips')" class="read-more">Read More →</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <img src="/img/img.png" alt="Blog post" />
+                <div class="blog-content">
+                    <h3>Sustainability with Innovation</h3>
+                    <p>
+                        Learn how the innovation plays a significant role in the production of organic produce and also helps in the transportation of the product from one place to another.
+                    </p>
+                    <a onclick="openModal('impact-innovation')" class="read-more">Read More →</a>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="blogModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="/img/img.png" alt="Blog post" />
+            <h2 id="modalTitle"></h2>
+            <div id="modalText" class="modal-text"></div>
+        </div>
+    </div>
+</section>
+<script src="/js/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+<footer class="bg-black text-white py-5">
+    <!--    before login-->
+    <th:block th:if="${user==null}">
+        <div class="container px-4">
+            <div class="row g-5">
+                <!-- Links Section -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-success mb-4 fw-bold">Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li class="mb-2"><a href="/home" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i> Home</a></li>
+                        <li class="mb-2"><a href="/blog" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>About Us</a></li>
+                        <li class="mb-2"><a href="/products" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>Products</a></li>
+                        <li class="mb-2"><a href="/contact" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>Contact Us</a></li>
+                        <li class="mb-2"><a href="/register" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>Register</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Info Section -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-success mb-4 fw-bold">Contact Info</h5>
+                    <ul class="list-unstyled contact-info">
+                        <li><i class="fa-solid fa-envelope"></i> Email: info@vfes.com</li>
+                        <li><i class="fa-solid fa-phone"></i> Phone: +977 9811111111</li>
+                        <li><i class="fa-solid fa-map-marker-alt"></i> Address: 123 VFES Lane, Kathmandu, Nepal</li>
+                    </ul>
+                </div>
+                <!-- Social Media Section -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="footer-logo">
+                        <img src="/img/Vfes-black.png" alt="VFES Logo" width="140" height="60" class="mb-3 rounded">
+                        <p class="mb-3">Your trusted source for fresh, organic vegetables and fruits directly from farmers to your table.</p>
+                    </div>
+
+                    <h5 class="text-success fw-bold">Follow Us</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-success-subtle my-4">
+            <!-- Copyright Section -->
+            <div class="text-center small text-white-50">
+                &copy; 2024-2025 VFES. All Rights Reserved.
+            </div>
+        </div>
+    </th:block>
+
+    <!--    after-login-->
+    <th:block th:if="${user!=null}">
+        <div class="container px-4"  th:if="${user.role=='ROLE_USER'}">
+            <div class="row g-5">
+                <!-- Links Section -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-success mb-4 fw-bold">Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li class="mb-2"><a href="/home" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i> Home</a></li>
+                        <li class="mb-2"><a href="/blog" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>About Us</a></li>
+                        <li class="mb-2"><a href="/products" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>Products</a></li>
+                        <li class="mb-2"><a href="/sellproduce" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>Sell Products</a></li>
+                        <li class="mb-2"><a href="/logout" class="text-white text-decoration-none"><i class="fa-solid fa-chevron-right me-2 text-success"></i>Logout</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Info Section -->
+                <div class="col-md-6 col-lg-3">
+                    <h5>Contact Info</h5>
+                    <ul class="list-unstyled contact-info">
+                        <li><i class="fa-solid fa-envelope"></i> Email: info@vfes.com</li>
+                        <li><i class="fa-solid fa-phone"></i> Phone: +977 9811111111</li>
+                        <li><i class="fa-solid fa-map-marker-alt"></i> Address: 123 VFES Lane, Kathmandu, Nepal</li>
+                    </ul>
+                </div>
+                <!-- Social Media Section -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="footer-logo">
+                        <img src="/img/Vfes-black.png" alt="VFES Logo" width="140" height="60" class="mb-3 rounded">
+                        <p class="mb-3">Your trusted source for fresh, organic vegetables and fruits directly from farmers to your table.</p>
+                    </div>
+
+                    <h5 class="text-success fw-bold">Follow Us</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-success-subtle my-4">
+            <!-- Copyright Section -->
+            <div class="text-center small text-white-50">
+                &copy; 2024-2025 VFES. All Rights Reserved.
+            </div>
+        </div>
+    </th:block>
+</footer>
+</html>

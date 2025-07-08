@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <h4>Supplier Panel</h4>
+
+                <a th:href="@{/admin/}"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a th:href="@{/admin/addproduct}"><i class="fa-solid fa-square-plus"></i> Add Product</a>
+                <a th:href="@{/admin/viewproducts}"><i class="fa fa-box"></i> Inventory</a>
+                <a th:href="@{/admin/orderdetails}"><i class="fa fa-receipt"></i> Order Status</a>
+                <a th:href="@{/admin/user-detail}"><i class="fa fa-user-gear"></i> Manage Users</a>
+            </div>
+<!--            Main Dashboard Content-->
+            <div class="col-md-10 main-content">
+                <h2 class="mb-4 custom-black">Orders Overview</h2>
+                <div class="d-flex justify-content-end card-body">
+                    <form class="d-flex" role="search" method="get" action="/admin/filtered">
+                        <div class="row">
+                            <div class="col">
+                                <input class="form-control me-2" type="search" name="keyword" placeholder="Search By Product Name" aria-label="Search" th:value="${keyword}">
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+<!--                Orders -->
+                <div th:if="${#lists.size(orders) > 0}" class="card">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped align-middle">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Contact</th>
+                                <th>Products</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Update Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="o : ${orders}">
+                                <td>
+                                    <strong th:text="${o.orderAddress.mobileNo}"></strong><br>
+                                    <span th:text="${o.orderAddress.email}"></span><br>
+                                    <span th:text="${o.orderAddress.city}"></span>
+                                </td>
+
+                                <td>
+                                    <div th:each="item : ${o.items}" class="mb-1">
+                                        <span class="fw-bold" th:text="${item.product.name}"></span> -
+                                        <span class="text-muted">Qty: <span th:text="${item.quantity}"></span></span>
+                                    </div>
+                                </td>
+
+                                <td th:text="${o.orderDate}"></td>
+
+                                <td>
+                                    <span th:if="${o.status == 'Order Cancelled'}" class="badge rounded-pill bg-danger" th:text="${o.status}"></span>
+                                    <span th:if="${o.status == 'Delivered'}" class="badge rounded-pill bg-success" th:text="${o.status}"></span>
+                                    <span th:if="${o.status == 'Received order'}" class="badge rounded-pill bg-secondary" th:text="${o.status}"></span>
+                                    <span th:if="${o.status != 'Order Cancelled' and o.status != 'Delivered' and o.status != 'Received order'}"
+                                          class="badge rounded-pill bg-warning text-dark" th:text="${o.status}"></span>
+                                </td>
+
+                                <td>Rs. <span th:text="${o.finalPrice}"></span></td>
+
+                                <td>
+                                    <span th:if="${o.paymentType == 'ONLINE'}" class="badge bg-primary">Online</span>
+                                    <span th:if="${o.paymentType == 'COD'}" class="badge bg-secondary">COD</span>
+                                </td>
+
+                                <td>
+                                    <form action="/admin/update-order-status" method="post" class="d-flex flex-column gap-1">
+                                        <select class="form-select form-select-sm"
+                                                name="o_status"
+                                                th:disabled="${o.status == 'Order Cancelled' or o.status == 'Received order'}">
+                                            <option value="1">Order in progress</option>
+                                            <option value="2">Ready for delivery</option>
+                                            <option value="3">Out for delivery</option>
+                                            <option value="4">Delivered</option>
+                                            <option value="5">Received order</option>
+                                            <option value="6">Order Cancelled</option>
+                                        </select>
+                                        <input type="hidden" th:value="${o.id}" name="id"/>
+                                        <button class="btn btn-sm btn-dark mt-1"
+                                                th:disabled="${o.status == 'Order Cancelled' or o.status == 'Received order'}">
+                                            Update
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+<!--                static image is search doesnot returns any image-->
+                <div th:if="${#lists.isEmpty(orders)}" class="text-center mt-5">
+                    <img src="/img/VFES_HOME.png" alt="No results found" style="max-width: 300px;">
+                    <p class="fs-4 mt-3">No orders found for your search.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

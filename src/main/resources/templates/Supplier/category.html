@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base:: layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <h4>Supplier Panel</h4>
+
+                    <a th:href="@{/admin/}"><i class="fa-solid fa-house"></i> Dashboard</a>
+                    <a th:href="@{/admin/addproduct}"><i class="fa-solid fa-square-plus"></i> Add Product</a>
+                    <a th:href="@{/admin/viewproducts}"><i class="fa fa-box"></i> Inventory</a>
+                    <a th:href="@{/admin/orderdetails}"><i class="fa fa-receipt"></i> Order Status</a>
+                    <a th:href="@{/admin/user-detail}"><i class="fa fa-user-gear"></i> Manage Users</a>
+                </div>
+
+                <!-- Main Dashboard Content -->
+                <div class="col-md-10 main-content">
+                    <h2 class="mb-4 custom-black">Add Product Categories</h2>
+
+                    <!-- Stats Section -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card card-sh">
+                                <div class="card-header text-center fs-4">Add Category</div>
+                                <div class="card-body">
+                                    <form id="categoryForm" action="/admin/savecategory" method="post" enctype="multipart/form-data" novalidate>
+                                        <div class="mb-3">
+                                            <label for="categoryname" class="form-label">Enter Category <span class="text-danger">*</span></label>
+                                            <input type="text" name="categoryname" id="categoryname" class="form-control" required>
+                                            <div id="categoryNameError" class="text-danger error-message"></div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="categorydescription" class="form-label">Enter Category Description <span class="text-danger">*</span></label>
+                                            <textarea rows="3" id="categorydescription" class="form-control" name="categorydescription" required></textarea>
+                                            <div id="categoryDescError" class="text-danger error-message"></div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="isAvailable" value="true" id="availableRadio" checked>
+                                            <label class="form-check-label" for="availableRadio">Available</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="isAvailable" value="false" id="outOfStockRadio">
+                                            <label class="form-check-label" for="outOfStockRadio">Out of Stock</label>
+                                        </div>
+
+                                        <div class="mb-3 mt-3">
+                                            <button class="btn btn-dark col-md-8">Add Category</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid col-md-8">
+                            <div class="card card-sh">
+                                <div class="card-header text-center fs-4">Category Details</div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Availability</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="c:${categories}">
+
+                                            <td>[[${c.categoryname}]]</td>
+                                            <td>[[${c.categorydescription}]]</td>
+                                            <td>[[${c.isAvailable}]]</td>
+                                            <td>
+                                                <a th:href="@{'/admin/editcategory/'+${c.id}}" class="btn btn-sm btn-success">Edit</a>
+                                                <a th:href="@{'/admin/deleteCategory/'+${c.id}}" class="btn btn-sm btn-danger">Delete</a>
+                                            </td>
+
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('categoryForm').addEventListener('submit', function(e) {
+                // Clear previous error messages
+                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+                let hasErrors = false;
+
+                const name = document.getElementById('categoryname').value.trim();
+                if (name.length < 3) {
+                    document.getElementById('categoryNameError').textContent = 'Category name must be at least 3 characters.';
+                    hasErrors = true;
+                }
+
+                const description = document.getElementById('categorydescription').value.trim();
+                if (description.length < 5) {
+                    document.getElementById('categoryDescError').textContent = 'Description must be at least 5 characters.';
+                    hasErrors = true;
+                }
+
+                if (hasErrors) {
+                    e.preventDefault();
+                }
+            });
+        </script>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base:: layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .main-color{
+            text-decoration: black;
+        }
+    </style>
+</head>
+<body>
+<section>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <h4>Supplier Panel</h4>
+
+            <a th:href="@{/admin/}"><i class="fa-solid fa-house"></i> Dashboard</a>
+            <a th:href="@{/admin/addproduct}"><i class="fa-solid fa-square-plus"></i> Add Product</a>
+            <a th:href="@{/admin/viewproducts}"><i class="fa fa-box"></i> Inventory</a>
+            <a th:href="@{/admin/orderdetails}"><i class="fa fa-receipt"></i> Order Status</a>
+            <a th:href="@{/admin/user-detail}"><i class="fa fa-user-gear"></i> Manage Users</a>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="col-md-10 main-content">
+            <h2 class="mb-4 custom-black">Dashboard Overview</h2>
+
+            <!-- Stats Section -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-title custom-black">Total Products</div>
+                        <div class="stat-value" th:text="${totalProducts}">0</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-title custom-black">Total Orders</div>
+                        <div class="stat-value" th:text="${totalOrders}">0</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-title custom-black">Total Users</div>
+                        <div class="stat-value" th:text="${totalUsers}">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="card p-4">
+                        <h5>Monthly Orders</h5>
+                        <canvas id="ordersChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-5 shadow rounded p-4">
+                <h2 class="text-center custom-black mb-4">Customer Produces</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle text-center">
+                        <thead class="table-dark">
+                        <tr>
+                            <th></th>
+                            <th>Image</th>
+                            <th>Full Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>City</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="produce, iterStat : ${produces}">
+                            <td th:text="${iterStat.count}">1</td>
+                            <td>
+                                <img th:src="@{'/img/produce/' + ${produce.productImage}}" alt="Product Image" class="img-thumbnail" width="60" height="60">
+                            </td>
+                            <td th:text="${produce.fullName}">John Doe</td>
+                            <td th:text="${produce.mobileNumber}">9800000000</td>
+                            <td th:text="${produce.email}">example@mail.com</td>
+                            <td th:text="${produce.productName}">Apples</td>
+                            <td th:text="${produce.productQuantity}">50 kg</td>
+                            <td th:text="${produce.productPrice}">Rs. 2000</td>
+                            <td th:text="${produce.city}">Kathmandu</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Chart Script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+
+    const orderLabels =  ["Jan", "Feb","March","April"];
+    const orderData = [15, 33, 35, 45];
+
+    const ctx = document.getElementById('ordersChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: orderLabels,
+            datasets: [{
+                label: 'Orders',
+                data: orderData,
+                backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                borderColor: 'rgba(41, 128, 185, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+</section>
+
+</body>
+</html>

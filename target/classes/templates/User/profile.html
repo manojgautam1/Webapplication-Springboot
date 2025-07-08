@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+<section>
+    <div class="text-center">
+        <th:block th:if="${session.succMsg}">
+            <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+        </th:block>
+
+        <th:block th:if="${session.errorMsg}">
+            <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+        </th:block>
+    </div>
+
+<!--    profile Sections-->
+    <div class="container mb-5">
+        <div class="card shadow rounded-lg" style="background-color: #d8eedd;">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center">
+                        <img th:if="${user.profileImage != null and !user.profileImage.isEmpty()}"
+                             th:src="@{'/img/profile/' + ${user.profileImage}}"
+                             alt="Profile Image" class="rounded-circle img-thumbnail mb-3" style="width: 130px;">
+
+                        <img th:if="${user.profileImage.isEmpty()}"
+                             th:src="@{'/img/profile.png'}"
+                             alt="Default Image" class="rounded-circle img-thumbnail mb-3" style="width: 130px;">
+
+                        <h4 class="mb-0" th:text="${user.name}"></h4>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <p><strong>Email:</strong> [[${user.email}]]</p>
+                                <p><strong>Mobile:</strong> [[${user.mobileNumber}]]</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Address:</strong> [[${user.address}]]</p>
+                                <p><strong>City:</strong> [[${user.city}]]</p>
+                                <p th:if="${user.zipcode != null and !user.zipcode.isEmpty()}">
+                                    <strong>Zipcode:</strong> [[${user.zipcode}]]
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    Amount of user spending-->
+    <div class="container mb-5" th:if="${totalAmountSpent != null}">
+        <div class="card text-center">
+            <div class="card-body">
+                <h4>Total Amount Spent</h4>
+                <h2 class="text-success">Rs. [[${totalAmountSpent}]]</h2>
+            </div>
+        </div>
+    </div>
+
+<!--    Ordering history for the users-->
+    <div class="container mb-5" th:if="${#lists.size(orders) > 0}">
+        <div class="card shadow">
+            <div class="card-header text-center bg-white">
+                <h3 class="mb-0">Order History</h3>
+            </div>
+            <div class="card-body">
+                <div th:each="order : ${orders}"
+                     th:if="${order.status != 'Order in progress' and order.status != 'Order Cancelled'}"
+                     class="mb-5 border rounded p-3 bg-light">
+
+                    <div class="row mb-3">
+                        <div class="col-md-3"><strong>Order ID:</strong> [[${order.orderId}]]</div>
+                        <div class="col-md-3"><strong>Order Date:</strong> [[${order.orderDate}]]</div>
+                        <div class="col-md-3">
+                            <strong>Status:</strong>
+                            <div th:switch="${order.status}">
+                                <span th:case="'Delivered'" class="text-success">[[${order.status}]]</span>
+                                <span th:case="'Ready for delivery'" class="text-info">[[${order.status}]]</span>
+                                <span th:case="'Out for delivery'" class="text-warning">[[${order.status}]]</span>
+                                <span th:case="'Received order'" class="text-primary">[[${order.status}]]</span>
+                                <span th:case="*"
+                                      class="text-secondary">[[${order.status}]]</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3"><strong>Payment:</strong> [[${order.paymentType}]]</div>
+                    </div>
+
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price (Each)</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${order.items}">
+                            <td>[[${item.product.name}]]</td>
+                            <td>[[${item.quantity}]]</td>
+                            <td>Rs. [[${item.price}]]</td>
+                            <td>Rs. [[${item.price * item.quantity}]]</td>
+                        </tr>
+                        </tbody>
+                        <tfoot class="table-light">
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Order Total:</strong></td>
+                            <td><strong>Rs. [[${order.finalPrice}]]</strong></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- DELIVERY ADDRESS -->
+                    <div class="mt-3">
+                        <h6>Delivery Address:</h6>
+                        <p class="mb-0">
+                            [[${order.orderAddress.firstName}]] [[${order.orderAddress.lastName}]]<br>
+                            [[${order.orderAddress.address}]], [[${order.orderAddress.city}]], [[${order.orderAddress.state}]] - [[${order.orderAddress.pincode}]]<br>
+                            Mobile: [[${order.orderAddress.mobileNo}]]<br>
+                            Email: [[${order.orderAddress.email}]]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    Empty order -->
+    <div class="container mb-5" th:if="${#lists.isEmpty(orders) or ordersCount == 0}">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h4>Order History</h4>
+                <p class="text-muted mt-3">No completed orders found.</p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

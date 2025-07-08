@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base:: layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+    <section>
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1>
+                   Shop With Us
+                </h1>
+                <p>
+                    Organic and daily essential at your doorstep
+                    <br>
+                    in a couple of minutes.
+                </p>
+                <div class="flex-content">
+                    <a href ="/products" class="btn hero-btn">Shop Now</a>
+                    <a href="/sellproduce" class="btn hero-btn-secondary">Contribute</a>
+                </div>
+            </div>
+        </div>
+        <br>
+<!--        Recentely added-->
+        <!-- Recently Added Products Section -->
+        <div class="container">
+            <h2 class="text-center custom-black mb-4">Recently Added Products</h2>
+
+            <!-- Check if products exist -->
+            <div class="card-body p-4" th:if="${recentProducts != null and !recentProducts.isEmpty()}">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                    <!-- Loop through recent products, max 8 -->
+                    <div class="col" th:each="p, iterStat : ${recentProducts}" th:if="${iterStat.index < 8}">
+                        <div class="card h-100 product-card border-0 shadow-sm rounded-3 overflow-hidden">
+                            <div class="position-relative">
+                                <img th:src="@{'/img/product/'+${p.image}}" class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
+                                <div class="position-absolute top-0 end-0 m-2" th:if="${p.discount > 0}">
+                                    <span class="badge bg-danger fs-6 fw-bold p-2">[[${p.discount}]]% OFF</span>
+                                </div>
+                            </div>
+                            <div class="card-body bg-white">
+                                <h5 class="card-title text-center">[[${p.name}]]</h5>
+                                <div class="d-flex justify-content-center align-items-center mb-3">
+                                    <span class="text-decoration-line-through text-muted me-2" th:if="${p.discount>0}">
+                                        Rs. [[${p.price}]]
+                                    </span>
+                                    <span class="fs-5 fw-bold text-success">
+                                        Rs. [[${p.discountPrice}]]
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between gap-2">
+                                    <a th:href="@{'/proddetail/'+${p.id}}" class="btn btn-outline-success flex-grow-1">View Details</a>
+                                    <th:block th:if="${p.stock>0}">
+                                        <th:block th:if="${user==null}">
+                                            <a href="/signin" class="btn btn-success"><i class="fa-solid fa-cart-plus me-1"></i>Add</a>
+                                        </th:block>
+                                        <th:block th:unless="${user==null}">
+                                            <a th:href="@{'/user/addCart?pid='+${p.id}+'&uid='+${user.id}}"
+                                               class="btn btn-success"><i class="fa-solid fa-cart-plus me-1"></i>Add</a>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${p.stock>0}">
+                                        <button class="btn btn-danger" disabled><i class="fa-solid fa-ban me-1"></i>Out of Stock</button>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View All Products Button -->
+                <div class="text-center mt-4">
+                    <a href="/products"
+                       class="btn btn-success"
+                       style="padding: 12px 30px; border-radius: 25px; font-weight: 600; background: linear-gradient(135deg, #8dd8a5, #398a51); border: none; box-shadow: 0 4px 12px rgb(0,71,20);">
+                        View All Products <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- No Products Message -->
+            <div th:unless="${recentProducts != null and !recentProducts.isEmpty()}"
+                 class="text-center">
+                <div class="card-sh" style="padding: 60px 20px;">
+                    <img src="/img/search.png"
+                         alt="No products found"
+                         style="max-width: 200px; opacity: 0.6; margin-bottom: 20px;">
+                    <h5 class="text-muted">No products available yet</h5>
+                    <p class="text-muted">Check back later for new products!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Recommendations</title>
+
+</head>
+<body>
+
+<section>
+    <div class="text-center mb-4">
+        <h1 class="custom-black">Recipe Recommendations</h1>
+    </div>
+    <div th:if="${recommendations.isEmpty()}" class="text-center">
+        <p class="custom-black">No Recipe Available For Your Purchase Details.</p>
+    </div>
+    <div th:unless="${recommendations.isEmpty()}" class="recipe-grid">
+        <div th:each="recipe,iterStat : ${recommendations}" class="recipe-card">
+            <div class="recipe-image-container">
+                <img th:if="${recipe.containsKey('image_url') and recipe.image_url !=null}"
+                     th:src="${recipe.image_url}" alt="Recipe Image" loading="lazy"
+                     onerror="this.src='/path/to/fallback-image.jpg'" />
+            </div>
+            <div class="recipe-details">
+                <h3 th:text="${recipe.recipe_name}">Recipe Name</h3>
+                <p><strong>Required Ingredients:</strong> <span th:text="${recipe.ingredients_list != null} ? ${recipe.ingredients_list} : 'N/A'">N/A</span></p>
+                <p><strong>Total Calories:</strong> <span th:text="${recipe.calories != null} ? ${recipe.calories} : 'N/A'">N/A</span></p>
+                <button class="read-more-btn" data-bs-toggle="modal"
+                        th:attr="data-bs-target='#modal-' + ${iterStat.index}"
+                        aria-label="Read more about ${recipe.recipe_name}">Read More</button>
+            </div>
+            <div class="modal fade" th:id="'modal-' + ${iterStat.index}" tabindex="-1"
+                 th:attr="aria-labelledby='modal-label-' + ${iterStat.index}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" th:id="'modal-label-' + ${iterStat.index}"
+                                th:text="${recipe.recipe_name != null} ? ${recipe.recipe_name} : 'Recipe'">Recipe</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Ingredients:</strong> <span th:text="${recipe.ingredients_list != null} ? ${recipe.ingredients_list} : 'No ingredients available'">No ingredients available</span></p>
+                            <p><strong>Calories:</strong> <span th:text="${recipe.calories != null} ? ${recipe.calories} : 'N/A'">N/A</span> kcal</p>
+                            <p><strong>Directions:</strong></p>
+                            <pre th:if="${recipe.containsKey('directions')}" th:text="${recipe.directions}"></pre>
+                            <pre th:unless="${recipe.containsKey('directions')}">No directions available</pre>
+                            <p><strong>Protein:</strong> <span th:text="${recipe.protein != null} ? ${recipe.protein} : 'N/A'">N/A</span> g</p>
+                            <p><strong>Fat:</strong> <span th:text="${recipe.fat != null} ? ${recipe.fat} : 'N/A'">N/A</span> g</p>
+                            <p><strong>Carbohydrates:</strong> <span th:text="${recipe.carbohydrates != null} ? ${recipe.carbohydrates} : 'N/A'">N/A</span> g</p>
+                            <p><strong>Fiber:</strong> <span th:text="${recipe.fiber != null} ? ${recipe.fiber} : 'N/A'">N/A</span> g</p>
+                            <p><strong>Vitamins:</strong></p>
+                            <ul>
+                                <li th:each="vitamin : ${recipe.vitamins}"
+                                    th:text="${vitamin.key} + ': ' + ${vitamin.value} + ' mg'"></li>
+                                <li th:if="${recipe.vitamins == null or recipe.vitamins.isEmpty()}">No vitamin data available</li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success"
+                                    th:onclick="'downloadModalContentAsPDF(' + ${iterStat.index} + ')'">
+                                Download as PDF
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="/user/user-order"
+           class="btn btn-secondary"
+           style="padding: 12px 30px; border-radius: 25px; font-weight: 600; background: linear-gradient(135deg, #8dd8a5, #398a51); border: none; box-shadow: 0 4px 12px rgb(0,71,20);">
+            Navigate to Orders <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+</body>
+</html>

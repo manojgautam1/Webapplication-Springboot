@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base:: layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <h4>Supplier Panel</h4>
+
+                    <a th:href="@{/admin/}"><i class="fa-solid fa-house"></i> Dashboard</a>
+                    <a th:href="@{/admin/addproduct}"><i class="fa-solid fa-square-plus"></i> Add Product</a>
+                    <a th:href="@{/admin/viewproducts}"><i class="fa fa-box"></i> Inventory</a>
+                    <a th:href="@{/admin/orderdetails}"><i class="fa fa-receipt"></i> Order Status</a>
+                    <a th:href="@{/admin/user-detail}"><i class="fa fa-user-gear"></i> Manage Users</a>
+                </div>
+
+                <!-- Main Dashboard Content -->
+                <div class="col-md-10 main-content">
+                    <h2 class="mb-4 custom-black">Products Overview</h2>
+
+                    <!-- Stats Section -->
+                    <div class="container-fluid p-1 mt-3">
+                        <div class="card-header bg-gradient bg-white border-bottom border-2 border-success d-flex justify-content-between align-items-center">
+                            <h3 class="text-success mb-0 py-2">Fresh Products</h3>
+                            <form th:action="@{/admin/viewproducts}" method="get" class="d-flex align-items-center gap-2">
+                                <select name="category" class="form-select" onchange="this.form.submit()">
+                                    <option value="">All Categories</option>
+                                    <option th:each="cat : ${categories}"
+                                            th:value="${cat.categoryname}"
+                                            th:text="${cat.categoryname}"
+                                            th:selected="${param.category} == ${cat.categoryname}">
+                                    </option>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="card" style="background-color: #bcd5bc">
+                            <div class="card-header text-center">
+                                <p class="fs-4">
+                                    View Products
+                                </p>
+                                <th:block th:if="${session.succMsg}">
+                                    <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                                </th:block>
+                                <th:block th:if="${session.errorMsg}">
+                                    <p class="text-error fw-bold">[[${session.errorMsg}]]</p>
+                                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                                </th:block>
+                            </div>
+                            <div class=" card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+            <!--                            <th scope="col">S.N</th>-->
+                                        <th scope="col">Availability</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Product Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Discount</th>
+                                        <th scope="col">Discounted Price</th>
+                                        <th scope="col">Stock</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="p,c:${products}">
+            <!--                            <th scope="row">[[${c.count}]]</th>-->
+                                        <td>[[${p.isActive}]]</td>
+                                        <td><img th:src="@{'/img/product/'+${p.image}}" width="100%" height="80px"></td>
+                                        <td>[[${p.name}]]</td>
+                                        <td>[[${p.description}]]</td>
+                                        <td>[[${p.price}]]</td>
+                                        <td>[[${p.discount}]]</td>
+                                        <td>[[${p.discountPrice}]]</td>
+                                        <td>[[${p.stock}]]</td>
+                                        <td>
+                                            <a th:href="@{'/admin/editproducts/'+${p.id}}" class="btn btn-sm btn-success">Edit</a>
+                                            <a th:href="@{'/admin/deleteproduct/'+${p.id}}" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

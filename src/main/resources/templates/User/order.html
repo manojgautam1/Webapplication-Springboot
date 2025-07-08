@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="ISO-8859-1">
+
+</head>
+<body>
+<section>
+
+    <div class="min-vh-100 d-flex justify-content-center align-items-center bg-light">
+        <div class="container py-5 custom-black">
+            <form action="/user/proceed-order" method="post" id="order" class="mx-auto" style="max-width: 1000px;">
+                <div class="row rounded-4 shadow p-5 g-4"  style="background-color: #bcd5bc">
+                    <!-- Billing Address -->
+                    <div class="col-md-6">
+                        <p class="text-center h5 mb-3">Billing Address</p>
+                        <hr>
+                        <br>
+                        <br>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" name="firstName" required class="form-control"
+                                       th:value="${firstName}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" name="lastName" required class="form-control"
+                                       th:value="${lastName}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" name="email" required class="form-control"
+                                       th:value="${user.email}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                                <input type="text" name="mobileNo" required class="form-control"
+                                       th:value="${user.mobileNumber}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Address <span class="text-danger">*</span></label>
+                                <input type="text" name="address" required class="form-control"
+                                       th:value="${user.address}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">City <span class="text-danger">*</span></label>
+                                <input type="text" name="city" required class="form-control"
+                                       th:value="${user.city}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Type -->
+                    <div class="col-md-6">
+                        <p class="text-center h5 mb-3">Payment Type</p>
+                        <hr>
+
+                        <div class="bg-light rounded-4 p-3 mb-3 border">
+                            <table class="table table-borderless mb-0">
+                                <tbody>
+                                <tr>
+                                    <td>Total price</td>
+                                    <td>:</td>
+                                    <td>Rs. [[${carts.totalprice}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>Delivery Fee</td>
+                                    <td>:</td>
+                                    <td>Rs. 50</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax</td>
+                                    <td>:</td>
+                                    <td>Rs. 100</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td>Grand Total</td>
+                                    <td>:</td>
+                                    <td>Rs. [[${totalOrderPrice}]]</td>
+                                    <input type="hidden" name="price" th:value="${totalOrderPrice}">
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-light rounded-4 p-3 border">
+                            <div class="mb-3">
+                                <label class="form-label">Select Payment Type</label>
+                                <select required name="paymentType" class="form-select">
+                                    <option value="COD">Cash On Delivery</option>
+                                    <option value="ONLINE">Online Payment</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success w-100" th:disabled="${isCartEmpty}">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("order");
+
+            form.addEventListener("submit", function (e) {
+                const firstName = form.firstName.value.trim();
+                const lastName = form.lastName.value.trim();
+                const email = form.email.value.trim();
+                const mobile = form.mobileNo.value.trim();
+                //validation
+                if (!firstName || !lastName || !email || !mobile) {
+                    e.preventDefault();
+                    alert("Please fill all required fields.");
+                    return;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    e.preventDefault();
+                    alert("Please enter a valid email.");
+                    return;
+                }
+
+                // Mobile number validation (10 digits)
+                const mobileRegex = /^\d{10}$/;
+                if (!mobileRegex.test(mobile)) {
+                    e.preventDefault();
+                    alert("Mobile number must be 10 digits.");
+                    return;
+                }
+            });
+        });
+    </script>
+
+
+</section>
+</body>
+</html>

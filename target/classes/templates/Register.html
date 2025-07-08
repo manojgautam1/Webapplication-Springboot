@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base:: layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section  class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="mt-5 p-5 custom-black">
+        <div th:if="${succMsg}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${succMsg}"></span>
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <!-- Error Message -->
+        <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMsg}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <form th:object="${users}" class="p-5 rounded-4 shadow" action="/saveUser" enctype="multipart/form-data" id="userRegister" novalidate
+              method="post" style="background-color: #bcd5bc">
+            <h1> Register</h1><hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="exampleInputName" class="form-label">Full Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" th:field="*{name}" id="exampleInputName" name="name" required>
+                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="exampleInputMobileNumber" class="form-label">MobileNumber<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" th:field="*{mobileNumber}" id="exampleInputMobileNumber" name="mobileNumber" required
+                           th:attr="readonly=${users.mobileNumber != null}">
+                    <div th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}" class="text-danger"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">Email address<span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="exampleInputEmail1" th:field="*{email}"  aria-describedby="email" placeholder="email" name="email" required>
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="exampleInputAddress" class="form-label">Address<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" th:field="*{address}"  id="exampleInputAddress" name="address" required>
+                    <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="exampleInputCity" class="form-label">City<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="exampleInputCity" name="city" required>
+                    <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="text-danger"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputZipcode" class="form-label">Zipcode</label>
+                <input type="text" class="form-control" id="exampleInputZipcode" name="Zipcode" >
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="exampleInputPassword1" class="form-label">Password<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" th:field="*{password}"  id="exampleInputPassword1" placeholder="***********" name="password" required>
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="PP" class="form-label">Profile Picture</label>
+                    <input type="file" class="form-control" id="PP" name="PP">
+                </div>
+            </div>
+
+            <div class="mb-3 p-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Agree to Our Terms&Conditions<span class="text-danger">*</span></label>
+            </div>
+            <button type="submit" class="btn btn-dark rounded-pill py-2">Register</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

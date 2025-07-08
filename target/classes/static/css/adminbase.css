@@ -1,0 +1,56 @@
+/*------For Admin Dashboard-------*/
+/*------For Admin Dashboard-------*/
+.sidebar {
+    height: 100vh;
+    background-color: #bcd5bc;
+    padding: 20px;
+    position: fixed;
+    top: 25px;
+    left: 0;
+    width: 200px;
+    color: #000000;
+}
+
+.sidebar a {
+    color: #000000;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.sidebar a:hover {
+    background-color: #8dd8a5;
+}
+
+.main-content {
+    padding: 20px;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow-y: auto;
+    margin-left: 220px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}

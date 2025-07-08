@@ -1,0 +1,511 @@
+
+/* Main css page for the document*/
+html {
+    scroll-behavior: smooth;
+}
+
+body{
+    background-color: whitesmoke;
+    color: white;
+    -ms-overflow-style: none;
+    padding-top: 76px;
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+body::-webkit-scrollbar {
+    display: none;
+}
+main{
+    flex: 1 0 auto;
+}
+.custom-black{
+    color: black;
+}
+.card-sh{
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.3);
+}
+.card-body{
+    text-decoration: black;
+}
+
+/*navbar*/
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-nav-center{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1.5rem;
+}
+.navbar-collapse {
+    position: relative;
+}
+
+.nav-link {
+    color: #2e7d32;
+    font-weight: 500;
+    padding: 0.8rem 1rem;
+    position: relative;
+    transition: background-color 3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+.nav-link.active{
+    text-decoration: none;
+}
+
+.nav-link:after{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #2e7d32;
+    bottom: 0.4px;
+    left:1rem;
+    right: 1rem;
+    transition: width 0.3s ease;
+}
+.nav-link:hover::after{
+    width: calc(100% - 2rem);
+}
+
+.nav-link:hover {
+
+    background-color: #bcd5bc; /* Dark green background on hover */
+
+}
+.nav-link.dropdown-toggle:hover{
+    background-color: #bcd5bc !important;
+
+}
+.nav-link.dropdown-toggle:hover::after{
+    /*width: 0 !important;*/
+    display: none;
+}
+.nav-btn {
+    padding: 0.3rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.custom-btn {
+    background-color: #1e1e1e;
+    border-color: #1faf25;
+    color: #ffffff;
+    padding: 0.3rem 1.2rem;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+    background-color: #1faf25;
+    border-color: #a3c585;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.dropdown-menu {
+    border-radius: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(46, 125, 50, 0.1);
+    color: white !important;
+}
+.dropdown-item.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* To hide the default Bootstrap in dropdown caret */
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.dropdown-toggle::after {
+    border: none !important;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    vertical-align: middle;
+    color: inherit;
+    margin-left: 0.25em;
+}
+
+/* To ensure dropdown toggle doesn't show the green background */
+.nav-link.dropdown-toggle,
+.nav-link.dropdown-toggle:hover,
+.nav-link.dropdown-toggle:focus {
+    background-color: transparent !important;
+}
+
+/*Home Page-Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh; /* Full viewport height */
+    background: url('../img/img.png') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.hero-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 5px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 0.75rem 2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.hero-btn-secondary {
+    background-color: grey;
+    color: white;
+    padding: 0.75rem 2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.hero-btn:hover {
+    background-color: #045c1e;
+    color: white;
+}
+.hero-btn-secondary:hover {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/*Product page css*/
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.product-card img {
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.list-group-item {
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.list-group-item:hover, .list-group-item.active {
+    border-left: 3px solid #28a745;
+    background-color: rgba(40, 167, 69, 0.05);
+}
+
+.btn-success, .btn-outline-success {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    transform: translateY(-2px);
+}
+
+/*Commitment*/
+.commitment-section-blog {
+    background-color: #000000;
+    padding: 20px 0;
+    text-align: center;
+}
+.commitment-section-blog h2 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+.commitment-section-blog p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-decoration-color: whitesmoke;
+}
+
+.reviews-section-blog {
+    padding: 20px 0;
+    background-color: whitesmoke;
+}
+.reviews-section-blog h1 {
+    color: #4CAF50;
+    text-align: center;
+    text-decoration-thickness: 5px;
+    margin-bottom: 20px;
+}
+.reviews-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.reviews-section-blog-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    flex: 1 1 300px;
+    max-width: 350px;
+}
+.reviews-section-blog-card p {
+    font-style: italic;
+    color: #555;
+}
+.reviews-section-blog-card .author {
+    font-weight: bold;
+    color: #4CAF50;
+    margin-top: 10px;
+}
+
+
+/*footer*/
+footer{
+    flex-shrink: 0;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    background-color: #000;
+}
+
+footer a:hover {
+    color: #4CAF50 !important;
+    transition: color 0.3s ease;
+}
+
+footer h5 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+footer hr {
+    opacity: 0.1; /* light soft border */
+}
+footer i {
+    margin-right: 0.5rem;
+}
+.footer-links li,
+.contact-info li{
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center ;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease;
+}
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.footer-links li:hover {
+    transform: translateX(5px);
+}
+
+/*recipe-order page css*/
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+    gap: 20px; /* Space between cards */
+    padding: 20px 0;
+    margin: 0 auto; /* Center the grid itself */
+    max-width: 1200px; /* Optional: limit the maximum width */
+}
+
+/* Making the cards display in a column format */
+.recipe-card {
+    background-color: #fffaf0;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Change to column layout */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Styling for the image container */
+.recipe-image-container {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Making images consistent width and maintain aspect ratio */
+.recipe-card img {
+    width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.recipe-details {
+    color: #333;
+}
+
+.recipe-details h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #2e7d32;
+}
+
+.recipe-details p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.recipe-details p strong {
+    color: #2e7d32;
+}
+
+/* Center heading and button */
+.text-center {
+    text-align: center;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+/* Style for the back button */
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.read-more-btn {
+    background-color: #2e7d32;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    align-self: center;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 992px) {
+    .recipe-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .recipe-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.read-more-btn:hover {
+    background-color: #1b5e20;
+}
+.modal-body p,
+.modal-body pre,
+.modal-body ul li {
+    color: #333;
+}
+.modal-backdrop {
+    pointer-events: all !important;
+    opacity: 0.5 !important;
+}
+
+.modal{
+    animation: none !important;
+    transition: none !important;
+
+}
+.modal.show {
+    pointer-events: all !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+.modal-content {
+    box-shadow: 0 5px 15px rgba(0,0,0,.5) !important;
+    border: 1px solid rgba(0,0,0,.2) !important;
+    background-color: white;
+    color: #333;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+.modal-dialog {
+    animation: none !important;
+    transition: none !important;
+    margin: 1.75rem auto !important;
+
+}
+
+.modal-body pre {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    overflow-x: visible;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    font-family: inherit;
+    margin-bottom: 1rem;
+}
+
+body.modal-open .recipe-card:hover {
+    transform: none !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}

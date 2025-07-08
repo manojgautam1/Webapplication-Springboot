@@ -1,0 +1,55 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<section>
+    <div class="container p-5 mt-3">
+        <div class="card shadow rounded-4 p-4">
+            <h3 class="mb-4 text-center text-primary">Pay with eSewa</h3>
+
+            <div th:each="item : ${order.items}">
+                <p><strong th:text="${item.product.name}">Product Name</strong> -
+                    <span th:text="'Rs. ' + ${item.price}">Price</span>
+                </p>
+            </div>
+
+            <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <input type="text" id="amount" name="amount" class="form-control"
+                           th:value="${totalAmount}" readonly required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="tax_amount" class="form-label">Tax Amount</label>
+                    <input type="text" id="tax_amount" name="tax_amount" class="form-control" value="0" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="total_amount" class="form-label">Total Amount</label>
+                    <input type="text" id="total_amount" name="total_amount" class="form-control"
+                           th:value="${totalAmount}" readonly required>
+                </div>
+
+                <input type="hidden" id="transaction_uuid" name="transaction_uuid" th:value="${uuid}">
+                <input type="hidden" id="product_code" name="product_code" value="EPAYTEST">
+                <input type="hidden" id="product_service_charge" name="product_service_charge" value="0">
+                <input type="hidden" id="product_delivery_charge" name="product_delivery_charge" value="0">
+                <input type="hidden" id="success_url" name="success_url" value="http://localhost:8082/user/order-recipe">
+                <input type="hidden" id="failure_url" name="failure_url" value="http://localhost:8082/user/esewa-payment-failure">
+                <input type="hidden" id="signed_field_names" name="signed_field_names"
+                       value="total_amount,transaction_uuid,product_code">
+                <input type="hidden" id="signature" name="signature" th:value="${hash}">
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-5">Pay Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

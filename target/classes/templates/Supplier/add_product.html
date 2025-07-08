@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base:: layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <h4>Supplier Panel</h4>
+
+                    <a th:href="@{/admin/}"><i class="fa-solid fa-house"></i> Dashboard</a>
+                    <a th:href="@{/admin/addproduct}"><i class="fa-solid fa-square-plus"></i> Add Product</a>
+                    <a th:href="@{/admin/viewproducts}"><i class="fa fa-box"></i> Inventory</a>
+                    <a th:href="@{/admin/orderdetails}"><i class="fa fa-receipt"></i> Order Status</a>
+                    <a th:href="@{/admin/user-detail}"><i class="fa fa-user-gear"></i> Manage Users</a>
+                </div>
+
+                <!-- Main Dashboard Content -->
+                <div class="col-md-10 main-content">
+                    <h2 class="mb-4 custom-black">Add products</h2>
+
+                    <!-- Stats Section -->
+
+                    <a href="/admin/category" class="btn btn-secondary">Add Category</a>
+                    <div class="container p-5 mt-3">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2 card card-sh" style="background-color: #bcd5bc">
+                                <div class="card-header text-center fs-4">
+                                    <p>Add Product</p>
+                                    <th:block th:if="${session.succMsg}">
+                                        <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                                        <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                                    </th:block>
+                                    <th:block th:if="${session.errorMsg}">
+                                        <p class="text-error fw-bold">[[${session.errorMsg}]]</p>
+                                        <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                                    </th:block>
+                                </div><hr>
+                                <div class="card-body">
+                                    <form action="/admin/saveProduct" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                        <div class="mb-3">
+                                            <label>Enter Product Name<span class="text-danger">*</span></label>
+                                            <input type="text" name="name" class="form-control" required pattern="^[a-zA-Z0-9\s]{3,100}$" title="Product name must be 3-100 characters long and contain only letters, numbers, and spaces.">
+                                            <div class="invalid-feedback">Please enter a valid product name.</div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label>Category<span class="text-danger">*</span></label>
+                                            <select class="form-control" name="category" required>
+                                                <option value="">Select Category</option>
+                                                <option th:each="c:${categories}" th:value="${c.categoryname}" th:text="${c.categoryname}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">Please select a category.</div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label>Enter Product Description<span class="text-danger">*</span></label>
+                                            <textarea rows="3" class="form-control" name="description" required minlength="10" maxlength="1000" pattern="^[a-zA-Z0-9\s,.!?'-]{10,1000}$" title="Description must be 10-1000 characters. Use letters, numbers, or basic punctuation."></textarea>
+                                            <div class="invalid-feedback">Please provide a valid product description (10-1000 characters).</div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="mb-3 col">
+                                                <label>Enter Product Price<span class="text-danger">*</span></label>
+                                                <input type="number" name="price" class="form-control" required min="1" step="0.01">
+                                                <div class="invalid-feedback">Please enter a valid price (min RS.1).</div>
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label>Enter Product Discount Rate<span class="text-danger">*</span></label>
+                                                <input type="number" name="discount" class="form-control" required min="0" max="100">
+                                                <div class="invalid-feedback">Enter a discount between 0 and 100.</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="mb-3 col">
+                                                <label>Enter Product Stock<span class="text-danger">*</span></label>
+                                                <input type="number" name="stock" class="form-control" required min="1">
+                                                <div class="invalid-feedback">Stock must be at least 1.</div>
+                                            </div>
+                                            <div class="mb-3 col">
+                                                <label>Upload Product Image<span class="text-danger">*</span></label>
+                                                <input type="file" name="file" class="form-control" accept="image/*" required>
+                                                <div class="invalid-feedback">Please upload a product image.</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3"><label>Product Availability</label>
+                                            <div class="row">
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="radio" name="isActive" value="true" id="active" checked required>
+                                                    <label class="form-check-label" for="active">Active</label>
+                                                </div>
+                                                <div class="form-check col">
+                                                    <input class="form-check-input" type="radio" name="isActive" value="false" id="inactive" required>
+                                                    <label class="form-check-label" for="inactive">Out Seasoned</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-dark col-md-12" type="submit">Add Product</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Bootstrap client-side validation
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    const forms = document.getElementsByClassName('needs-validation');
+                    Array.prototype.forEach.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+        </script>
+    </section>
+</body>
+</html>
